@@ -17,6 +17,8 @@ public class Photo {
     @Column(name = "Location", nullable = false, length = 35)
     private String location;
 
+    @Column(name = "title")//, nullable = false, length = 35)
+    private String title;
 
     @Column(name = "VisNr", updatable = false)
     private int viewNo;
@@ -122,6 +124,14 @@ public class Photo {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void addTag(Tag tag) {

@@ -101,8 +101,25 @@ public class TagFacade implements IDataFacade<Tag>{
 
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
-        IDataFacade fe = getFacade(emf);
-        fe.findByProperty("location", "Joergensen/").forEach(Tag->System.out.println(Tag));
+        IDataFacade<Tag> fe = getFacade(emf);
+//        fe.create(new Tag("Betty Mogensen","Født 13 februar 1945. Navngivet Betty Bügel Jørgensen. Mor: Kylle, Far: Thorkild, Søskende: [Preben Jørgensen, Birgit Christensen]. Boede i Holte fra 6-23. Gift med Henrik Mogensen. Mor til [Thomas Hartmann (f. Mogensen), Marianne Mogensen]. Børnebørn: [Laura, Alva, Victor Leander]. Har boet i Måløv fra 1974 på henholdsvis Knastebakken 117 og Kærlodden 47. Er uddannet Farmaceut og har en licentiatgrad i kemi. Har arbejdet på Ferocan, Miljøstyrelsen og hos en Dyrlæge i Holbæk"));
+//        fe.create(new Tag("Henrik Mogensen","Født 20. augutst 1945. Navngivet Henrik Helge Mogensen. Mor: Ditte, Far: Mads, Søskende: [Dina, Birgit]. Boede i Charlottenlund til 6 år og i Hjortekær fra 6-23. Gift med Betty Mogensen (f. Jørgensen). Børnebørn: [Laura, Alva, Victor Leander]. Har boet i Måløv fra 1974 på henholdsvis Knastebakken 117 og Kærlodden 47. Er uddannet Cand Mag i Historie og Dansk ved Københavns Universitet og har arbejde med med undervisning både på voksenuddannelsesområdet samt på Hillerød Handelsskole (til 62 år)." ));
+//        fe.create(new Tag("Thomas Hartmann","Født 6. juni 1968. Navngivet Thomas Bügel Mogensen. Mor: Betty, Far: Henrik. Søskende: [Marianne]. Gift med Charlotte Hartmann (Født Christensen) og far til Victor Leander. Er uddannet Cand IT fra IT-Universistet København. Har arbejdet som softwareudvikler og konsulent hos Projectum samt som Adjunkt og Lektor ved erhvervsakademiet CphBusiness. Har boet mange forskellige steder i København gennem mere end 20 år samt i Slette, Humlebæk fra 2014"));
+//        fe.create(new Tag("Charlotte Hartmann","Født 25 august 1967. Navngivet Anne Charlotte Christensen. Mor: Else, Far: Ben. Gift med Thomas og mor til Victor Leander. Uddannet Bachelor i Skuespil ved GUILDHALL, London, Har arbejdet som skuespiller frem til 2007. Har drevet selvstændig virksomhed i tøjbranchen fra 2007. Har boet i London fro 1993-2001. I København til 2014 og i Sletten, Humlebæk fra 2014"));
+//        fe.create(new Tag("Victor Leander", "Født 24. maj 2009. Navngivet Victor Leander Bügel Hartmann. Mor Charlotte, Far Thomas. Boede på Løgstørgade 14st.tv.,Østerbro fra 2009-2014 og derefter i Sletten, Humlebæk"));
+//        fe.create(new Tag("Kylle Jørgensen"));
+//        fe.create(new Tag("Thorkild Jørgensen"));
+//        fe.create(new Tag("Johannes (Mads) Madsen"));
+//        fe.create(new Tag("Edith (Ditte) Madsen"));
+//        fe.create(new Tag("Grethe (Granni) Winge"));
+//        fe.create(new Tag("Edmund Hartmann"));
+//        fe.create(new Tag("Preben Hartmann"));
+//        fe.create(new Tag("Børge Hartmann"));
+//        fe.create(new Tag("Preben Jørgensen"));
+//        fe.create(new Tag("Birgit Christensen"));
+//        fe.create(new Tag("Per Winge"));
+//        fe.create(new Tag("Lotte Hartmann"));
+//        fe.create(new Tag("Else"));
     }
 
     @Override

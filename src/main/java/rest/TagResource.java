@@ -2,12 +2,11 @@ package rest;
 
 import businessfacades.PhotoDTOFacade;
 import businessfacades.TagDTOFacade;
-import datafacades.TagFacade;
-import dtos.TagDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import datafacades.IDataFacade;
 import dtos.PhotoDTO;
+import dtos.TagDTO;
 import errorhandling.EntityNotFoundException;
 
 import javax.annotation.security.RolesAllowed;
@@ -17,10 +16,8 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("photo")
-public class PhotoResource {
-       
-    private static final IDataFacade<PhotoDTO> PHOTO_FACADE  =  PhotoDTOFacade.getFacade();
+@Path("tag")
+public class TagResource {
     private static final IDataFacade<TagDTO> TAG_FACADE =  TagDTOFacade.getFacade();
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -28,15 +25,15 @@ public class PhotoResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAll() {
-        return Response.ok().entity(GSON.toJson(PHOTO_FACADE .getAll())).build();
+        return Response.ok().entity(GSON.toJson(TAG_FACADE .getAll())).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getById(@PathParam("id") String id) throws EntityNotFoundException {
-        PhotoDTO p = PHOTO_FACADE .getById(id);
-        return Response.ok().entity(GSON.toJson(p)).build();
+        TagDTO t = TAG_FACADE.getById(id);
+        return Response.ok().entity(GSON.toJson(t)).build();
     }
 
     @GET
@@ -46,26 +43,14 @@ public class PhotoResource {
         List<TagDTO> tagDtos = TAG_FACADE.getAll();
         return Response.ok().entity(GSON.toJson(tagDtos)).build();
     }
-    
-    @GET
-    @Path("/property/{propname}/{propvalue}")
-    @Produces({MediaType.APPLICATION_JSON})
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response getByProperty(@PathParam("propname") String propName, @PathParam("propvalue") String propValue){
-        System.out.println("GET BY PROPERTY: "+propName+": "+propValue);
-        List<PhotoDTO> photos = PHOTO_FACADE .findByProperty(propName, propValue);
-        return Response.ok().entity(GSON.toJson(photos)).build();
-    }
-    
-
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
     public Response create(String content) {
-        PhotoDTO pdto = GSON.fromJson(content, PhotoDTO.class);
-        PhotoDTO newPdto = PHOTO_FACADE .create(pdto);
+        TagDTO pdto = GSON.fromJson(content, TagDTO.class);
+        TagDTO newPdto = TAG_FACADE .create(pdto);
         return Response.ok().entity(GSON.toJson(newPdto)).build();
     }
 
@@ -75,8 +60,8 @@ public class PhotoResource {
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
     public Response update(@PathParam("id") String id, String content) throws EntityNotFoundException {
-        PhotoDTO pdto = GSON.fromJson(content, PhotoDTO.class);
-        PhotoDTO updated = PHOTO_FACADE .update(pdto);
+        TagDTO pdto = GSON.fromJson(content, TagDTO.class);
+        TagDTO updated = TAG_FACADE .update(pdto);
         return Response.ok().entity(GSON.toJson(updated)).build();
     }
 
@@ -85,7 +70,7 @@ public class PhotoResource {
     @Produces({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
     public Response delete(@PathParam("id") String id) throws EntityNotFoundException {
-        PhotoDTO deleted = PHOTO_FACADE .delete(id);
+        TagDTO deleted = TAG_FACADE .delete(id);
         return Response.ok().entity(GSON.toJson(deleted)).build();
     }
 }

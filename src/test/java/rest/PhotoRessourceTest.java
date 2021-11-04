@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import dtos.PhotoDTO;
 import dtos.TagDTO;
 import entities.Photo;
+import entities.Role;
+import entities.User;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -96,6 +98,15 @@ public class PhotoRessourceTest {
             em.getTransaction().begin();
             em.createNamedQuery("Tag.deleteAllRows").executeUpdate();
             em.createNamedQuery("Photo.deleteAllRows").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
+
+            Role adminRole = new Role("admin");
+            User admin = new User("admin", "test");
+            admin.addRole(adminRole);
+
+            em.persist(adminRole);
+            em.persist(admin);
             em.persist(t1);
             em.persist(t2);
             em.persist(p1);
@@ -105,6 +116,25 @@ public class PhotoRessourceTest {
         } finally {
             em.close();
         }
+    }
+
+    private static String securityToken;
+
+    //Utility method to login and set the returned securityToken
+    private static void login(String role, String password) {
+        String json = String.format("{username: \"%s\", password: \"%s\"}", role, password);
+        securityToken = given()
+                .contentType("application/json")
+                .body(json)
+                //.when().post("/api/login")
+                .when().post("/login")
+                .then()
+                .extract().path("token");
+        System.out.println("TOKEN ---> " + securityToken);
+    }
+
+    private void logOut() {
+        securityToken = null;
     }
 
     @Test
@@ -197,6 +227,7 @@ public class PhotoRessourceTest {
 
     @Test
     public void postTest() {
+        login("admin", "test");
         Photo p = new Photo("Somewhere","Helge","TEXTEXT");
         p.addTag(new Tag("Josephine"));
         PhotoDTO pdto = new PhotoDTO(p);
@@ -204,6 +235,7 @@ public class PhotoRessourceTest {
         System.out.println("POSTTEST: "+requestBody);
         given()
                 .header("Content-type", ContentType.JSON)
+                .header("x-access-token", securityToken)
                 .and()
                 .body(requestBody)
                 .when()
@@ -217,6 +249,7 @@ public class PhotoRessourceTest {
 
     @Test
     public void updateTest() {
+        login("admin", "test");
         p2.addTag(t2);
         p2.setPhotoTxt("NEW TEXT");
         PhotoDTO pdto = new PhotoDTO(p2);
@@ -224,6 +257,7 @@ public class PhotoRessourceTest {
 
         given()
                 .header("Content-type", ContentType.JSON)
+                .header("x-access-token", securityToken)
                 .and()
                 .body(requestBody)
                 .when()
@@ -238,8 +272,10 @@ public class PhotoRessourceTest {
 
     @Test
     public void testDeletePhoto() {
+        login("admin", "test");
         given()
                 .contentType(ContentType.JSON)
+                .header("x-access-token", securityToken)
                 .pathParam("id", p2.getFileName())
                 .delete("/photo/{id}")
                 .then()

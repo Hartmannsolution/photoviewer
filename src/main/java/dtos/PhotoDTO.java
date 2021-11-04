@@ -11,6 +11,7 @@ public class PhotoDTO {
     private String location;
     private String name;
     private int viewNo;
+    private String title;
     private String description;
     private List<TagDTO> tags = new ArrayList();
 
@@ -18,6 +19,7 @@ public class PhotoDTO {
         this.location = photo.getLocation();
         this.name = photo.getFileName();
         this.viewNo = photo.getViewNo();
+        this.title = photo.getTitle();
         this.description = photo.getPhotoTxt();
         photo.getTags().forEach(tag->this.tags.add(new TagDTO(tag)));
     }
@@ -64,6 +66,14 @@ public class PhotoDTO {
 
     public void setTags(List<TagDTO> tags) {
         this.tags = tags;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

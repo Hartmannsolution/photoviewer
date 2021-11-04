@@ -20,11 +20,18 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(errorhandling.API_ExceptionMapper.class);
         resources.add(errorhandling.EntityNotFoundExceptionMapper.class);
         resources.add(errorhandling.GenericExceptionMapper.class);
         resources.add(org.glassfish.jersey.jsonb.internal.JsonBindingProvider.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
         resources.add(rest.CorsFilter.class);
         resources.add(rest.PhotoResource.class);
+        resources.add(rest.TagResource.class);
+        resources.add(security.JWTAuthenticationFilter.class);
+        resources.add(security.LoginEndpoint.class);
+        resources.add(security.RolesAllowedFilter.class);
+        resources.add(security.errorhandling.AuthenticationExceptionMapper.class);
+        resources.add(security.errorhandling.NotAuthorizedExceptionMapper.class);
     }
 }
