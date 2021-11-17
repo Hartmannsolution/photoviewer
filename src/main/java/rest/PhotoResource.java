@@ -2,12 +2,14 @@ package rest;
 
 import businessfacades.PhotoDTOFacade;
 import businessfacades.TagDTOFacade;
-import datafacades.TagFacade;
 import dtos.TagDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import datafacades.IDataFacade;
+import datafacades.UserFacade;
 import dtos.PhotoDTO;
+import dtos.UserDTO;
+import entities.User;
 import errorhandling.EntityNotFoundException;
 
 import javax.annotation.security.RolesAllowed;
@@ -15,13 +17,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import utils.EMF_Creator;
 
-//Todo Remove or change relevant parts before ACTUAL use
 @Path("photo")
 public class PhotoResource {
        
     private static final IDataFacade<PhotoDTO> PHOTO_FACADE  =  PhotoDTOFacade.getFacade();
     private static final IDataFacade<TagDTO> TAG_FACADE =  TagDTOFacade.getFacade();
+    private static final IDataFacade<UserDTO> USER_FACADE =  UserFacade.getFacade(EMF_Creator.createEntityManagerFactory());
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
@@ -63,10 +66,22 @@ public class PhotoResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
-    public Response create(String content) {
+    public Response create(String content) throws Exception {
         PhotoDTO pdto = GSON.fromJson(content, PhotoDTO.class);
         PhotoDTO newPdto = PHOTO_FACADE .create(pdto);
         return Response.ok().entity(GSON.toJson(newPdto)).build();
+    }
+    
+    @POST
+    @Path("user")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @RolesAllowed("admin")
+    public Response createUser(String content) throws Exception {
+        UserDTO user = GSON.fromJson(content, UserDTO.class);
+        user = USER_FACADE.create(user);
+        user.setPassword(null);
+        return Response.ok().entity(GSON.toJson(user)).build();
     }
 
     @PUT
@@ -88,4 +103,6 @@ public class PhotoResource {
         PhotoDTO deleted = PHOTO_FACADE .delete(id);
         return Response.ok().entity(GSON.toJson(deleted)).build();
     }
+    
+    
 }

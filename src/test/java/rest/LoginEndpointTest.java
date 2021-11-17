@@ -65,7 +65,6 @@ public class LoginEndpointTest {
     }
 
     // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
-    //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
@@ -153,12 +152,12 @@ public class LoginEndpointTest {
     public void userNotAuthenticated() {
         logOut();
         given()
-                .contentType("application/json")
-                .when()
-                .post("/photo").then()
-                .statusCode(403)
-                .body("code", equalTo(403))
-                .body("message", equalTo("Not authenticated - do login"));
+            .contentType("application/json")
+            .when()
+            .post("/photo").then()
+            .statusCode(403)
+            .body("code", equalTo(403))
+            .body("message", equalTo("Not authenticated - do login"));
     }
 
 }

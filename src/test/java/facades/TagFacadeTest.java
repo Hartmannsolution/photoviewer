@@ -5,6 +5,7 @@ import datafacades.TagFacade;
 import datafacades.TagFacade;
 import entities.Tag;
 import entities.Tag;
+import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
@@ -55,7 +56,7 @@ class TagFacadeTest {
 
 
     @Test
-    void create() {
+    void create() throws API_Exception {
         System.out.println("Testing create(Tag t)");
         Tag t = new Tag("Somewhere","TestTag");
         Tag expected = t;

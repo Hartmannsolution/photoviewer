@@ -6,6 +6,7 @@ import dtos.TagDTO;
 import dtos.TagDTO;
 import entities.Tag;
 import entities.Tag;
+import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 import utils.EMF_Creator;
 
@@ -48,7 +49,7 @@ public class TagDTOFacade implements IDataFacade<TagDTO>{
     }
 
     @Override
-    public TagDTO create(TagDTO tagDTO) {
+    public TagDTO create(TagDTO tagDTO) throws API_Exception {
         Tag p = getEntity(tagDTO);
         p = tagFacade.create(p);
         return new TagDTO(p);

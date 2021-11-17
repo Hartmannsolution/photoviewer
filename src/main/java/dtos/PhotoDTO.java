@@ -88,4 +88,16 @@ public class PhotoDTO {
     public int hashCode() {
         return Objects.hash(location, name, description);
     }
+
+    @Override
+    public String toString() {
+        return "PhotoDTO{" +
+                "location='" + location + '\'' +
+                ", name='" + name + '\'' +
+                ", viewNo=" + viewNo +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", tags=" + tags +
+                '}';
+    }
 }

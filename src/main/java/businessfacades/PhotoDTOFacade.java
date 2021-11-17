@@ -6,6 +6,7 @@ import dtos.PhotoDTO;
 import dtos.TagDTO;
 import entities.Photo;
 import entities.Tag;
+import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 import utils.EMF_Creator;
 
@@ -33,23 +34,26 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
     private Photo getEntity(PhotoDTO dto){
         EntityManager em = EMF.createEntityManager();
         Photo photo = em.find(Photo.class, dto.getName());
-        System.out.println("GET ENTITY: "+photo); //Tags are empty
+
         if (photo == null){
-            photo = new Photo(dto.getLocation(),dto.getName(), dto.getDescription());
-            final Photo p = photo; //p must be final to work inside lambda
-            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
+            photo = new Photo(dto.getName(), dto.getLocation(), dto.getDescription());
+//            final Photo p = photo; //p must be final to work inside lambda
+//            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
         }
         else{
             //Copy all properties from DTO to Entity (that we got from DB)
             if(dto.getLocation()!=null) photo.setLocation(dto.getLocation());
             if(dto.getViewNo()!=0) photo.setViewNo(dto.getViewNo());
             if(dto.getDescription()!=null) photo.setPhotoTxt(dto.getDescription());
-            final Photo p = photo; //p must be final to work inside lambda
-            //add tags from dto
-            photo.getTags().clear();
-            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
+
         }
-        return photo;
+        final Photo p = photo; //p must be final to work inside lambda
+        photo.getTags().clear();
+        dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
+//        System.out.println("PHOTO DTO FACADEN getEntity(photo)");
+//        dto.getTags().forEach(System.out::println);
+//        System.out.println("END");
+        return p;
     }
 
     private Tag getEntity(TagDTO dto){
@@ -61,9 +65,15 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
     }
 
     @Override
-    public PhotoDTO create(PhotoDTO photoDTO) {
+    public PhotoDTO create(PhotoDTO photoDTO) throws API_Exception {
         Photo p = getEntity(photoDTO);
         p = photoFacade.create(p);
+        return new PhotoDTO(p);
+    }
+
+    @Override
+    public PhotoDTO update(PhotoDTO photoDTO) throws EntityNotFoundException {
+        Photo p = photoFacade.update(getEntity(photoDTO));
         return new PhotoDTO(p);
     }
 
@@ -77,11 +87,6 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
         return PhotoDTO.toList(photoFacade.getAll());
     }
 
-    @Override
-    public PhotoDTO update(PhotoDTO photoDTO) throws EntityNotFoundException {
-        Photo p = photoFacade.update(getEntity(photoDTO));
-        return new PhotoDTO(p);
-    }
 
     @Override
     public PhotoDTO delete(String id) throws EntityNotFoundException {

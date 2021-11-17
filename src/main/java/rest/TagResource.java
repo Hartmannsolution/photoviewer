@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import datafacades.IDataFacade;
 import dtos.PhotoDTO;
 import dtos.TagDTO;
+import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 
 import javax.annotation.security.RolesAllowed;
@@ -15,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-//Todo Remove or change relevant parts before ACTUAL use
 @Path("tag")
 public class TagResource {
     private static final IDataFacade<TagDTO> TAG_FACADE =  TagDTOFacade.getFacade();
@@ -48,7 +48,7 @@ public class TagResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
-    public Response create(String content) {
+    public Response create(String content) throws API_Exception {
         TagDTO pdto = GSON.fromJson(content, TagDTO.class);
         TagDTO newPdto = TAG_FACADE .create(pdto);
         return Response.ok().entity(GSON.toJson(newPdto)).build();

@@ -59,4 +59,13 @@ public class TagDTO {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toString() {
+        return "TagDTO{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", photos=" + photos +
+                '}';
+    }
 }

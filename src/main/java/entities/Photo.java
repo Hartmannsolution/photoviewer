@@ -54,9 +54,10 @@ public class Photo {
     public Photo() {
     }
 
-    public Photo(String location, String fileName, String photoTxt) {
+    public Photo(String fileName, String location, String photoTxt) {
+        if(fileName.length()>2)
+            this.fileName = fileName;
         this.location = location;
-        this.fileName = fileName;
         this.photoTxt = photoTxt;
     }
 
@@ -112,10 +113,6 @@ public class Photo {
 
     public String getFileName() {
         return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public Set<Tag> getTags() {
@@ -176,7 +173,7 @@ public class Photo {
                 ", photoTxtAdd='" + photoTxtAdd + '\'' +
                 ", created=" + created +
                 ", editted=" + editted +
-                ", tags=" + tags +
+                ", tags=" + tags.stream().map(tag ->tag.getName()).reduce("",(acc,element)->acc+", "+element) +
                 '}';
     }
 }

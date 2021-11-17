@@ -12,14 +12,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
-        <!-- TODO: Add the URL to your own tomcat server. Used to deploy your WAR-file -->
-        <!-- IMPORTANT-1: If your server uses https (via NGINX) use your DOMAIN NAME and https below: -->
-        <!-- IMPORTANT-2: Observe we are NOT using /manager/html but /manager/text for script uploads --> 
-	<remote.server>https://edu.bugelhartmann.dk/manager/text</remote.server>
-
-        <!-- TODO: Add your own database name -->
-        <!-- IMPORTANT-1: The database should exist on your droplet -->
+	    <remote.server>https://edu.bugelhartmann.dk/manager/text</remote.server>
         <db.name>familyphotos</db.name>
     </properties>
     
@@ -136,7 +129,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>

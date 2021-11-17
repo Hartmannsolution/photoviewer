@@ -2,6 +2,7 @@ package datafacades;
 
 import entities.Photo;
 import entities.Tag;
+import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 import java.io.IOException;
 import utils.EMF_Creator;
@@ -9,6 +10,7 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,8 +48,10 @@ public class PhotoFacade implements IDataFacade<Photo>{
     }
 
     @Override
-    public Photo create(Photo p){
+    public Photo create(Photo p) throws API_Exception {
         EntityManager em = getEntityManager();
+        if(em.find(Photo.class,p.getFileName())!=null)
+            throw new API_Exception("Photo allready exist with this name: "+p.getFileName(),403);
         try {
             em.getTransaction().begin();
             p.getTags().forEach(tag->{
@@ -76,29 +80,30 @@ public class PhotoFacade implements IDataFacade<Photo>{
     }
 
     @Override
-    public List<Photo> getAll(){
-        EntityManager em = getEntityManager();
-        TypedQuery<Photo> query = em.createQuery("SELECT p FROM Photo p", Photo.class);
-        List<Photo> Photos = query.getResultList();
-        return Photos;
-    }
-
-
-    public List<Photo> getByTagName(String tagName){
-        EntityManager em = getEntityManager();
-        TypedQuery<Photo> query = em.createQuery("SELECT p FROM Photo p JOIN p.tags t WHERE t.name = :tagName", Photo.class).setParameter("tagName",tagName);
-        List<Photo> Photos = query.getResultList();
-        return Photos;
-    }
-
-    @Override
     public Photo update(Photo photo) throws EntityNotFoundException {
-        System.out.println(photo);
         EntityManager em = getEntityManager();
-        if (photo.getFileName() == null)
+        Photo found = em.find(Photo.class,photo.getFileName());
+        if(photo.getFileName() == null || found == null)
             throw new IllegalArgumentException("No Photo by that name. Not updated");
         em.getTransaction().begin();
-        Photo p = em.merge(photo);
+        if(photo.getPhotoTxt()!=null) found.setPhotoTxt(photo.getPhotoTxt());
+        if(photo.getLocation()!=null) found.setLocation(photo.getLocation());
+        if(photo.getViewNo()!=0) found.setViewNo(photo.getViewNo());
+        //If photo has any tags, then those are the ones that count.
+        if(photo.getTags()!=null && photo.getTags().size()!=0) {
+//          Make copy of list before iterating and removing to avoid error
+            new ArrayList<Tag>(found.getTags()).forEach(tag ->{
+                found.removeTag(tag);
+            });
+            photo.getTags().forEach(tag->{
+                Tag t = em.find(Tag.class, tag.getName());
+                if(t == null){
+                    em.persist(tag);
+                }
+                found.addTag(tag);
+            });
+        }
+        Photo p = em.merge(found);
         System.out.println(p);
         em.getTransaction().commit();
         return p;
@@ -116,11 +121,42 @@ public class PhotoFacade implements IDataFacade<Photo>{
         return p;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
         emf = EMF_Creator.createEntityManagerFactory();
         IDataFacade fe = getFacade(emf);
-        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
+//        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
+        Photo newP = new Photo("Joergensen_0001_TN.jpg","","");
+        Photo newP2 = new Photo("Helge333333","","");
+//        try {
+//            fe.create(newP);
+//        } catch (API_Exception e) {
+//            e.printStackTrace();
+//        }
+//        newP.addTag(new Tag("Hello Test"));
+        newP.addTag(new Tag("Mors"));
+        newP2.addTag((new Tag("Børge Artmann")));
+//        newP.addTag(new Tag("thOrkild22"));
+//        newP.addTag(new Tag("hello test"));
+        System.out.println(fe.update(newP));
+
     }
+
+    @Override
+    public List<Photo> getAll(){
+        EntityManager em = getEntityManager();
+        TypedQuery<Photo> query = em.createQuery("SELECT p FROM Photo p", Photo.class);
+        List<Photo> Photos = query.getResultList();
+        return Photos;
+    }
+
+
+    public List<Photo> getByTagName(String tagName){
+        EntityManager em = getEntityManager();
+        TypedQuery<Photo> query = em.createQuery("SELECT p FROM Photo p JOIN p.tags t WHERE t.name = :tagName", Photo.class).setParameter("tagName",tagName);
+        List<Photo> Photos = query.getResultList();
+        return Photos;
+    }
+
 
     @Override
     public List<Photo> findByProperty(String property, String propValue) {

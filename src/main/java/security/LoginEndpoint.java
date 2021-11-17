@@ -10,10 +10,9 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import datafacades.UserFacade;
-import entities.User;
 import errorhandling.API_Exception;
 import datafacades.UserFacade;
+import dtos.UserDTO;
 import errorhandling.GenericExceptionMapper;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
@@ -52,8 +51,10 @@ public class LoginEndpoint {
         }
 
         try {
-            User user = USER_FACADE.getVeryfiedUser(username, password);
-            String token = createToken(username, user.getRolesAsStrings());
+            UserDTO user = USER_FACADE.getVeryfiedUser(username, password);
+            user.getRoles().forEach(System.out::println);
+            
+            String token = createToken(username, user.getRoles());
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("username", username);
             responseJson.addProperty("token", token);

@@ -12,12 +12,14 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import entities.Tag;
+import junit.framework.Assert;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
+import javax.validation.constraints.AssertTrue;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
@@ -26,6 +28,7 @@ import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -39,7 +42,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.BeforeAll;
 
 //Uncomment the line below, to temporarily disable this test
-//@Disabled
+@Disabled
 public class PhotoRessourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -84,8 +87,8 @@ public class PhotoRessourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        p1 = new Photo("Somewhere","Henrik", "Some text");
-        p2 = new Photo("Somewhere","Betty", "Some other thext");
+        p1 = new Photo("Henrik.jpg","Somewhere", "Some text");
+        p2 = new Photo("Betty.jpg","Somewhere else", "Some other thext");
         t1 = new Tag("Joseph");
         t2 = new Tag("Alberta");
 
@@ -119,7 +122,6 @@ public class PhotoRessourceTest {
     }
 
     private static String securityToken;
-
     //Utility method to login and set the returned securityToken
     private static void login(String role, String password) {
         String json = String.format("{username: \"%s\", password: \"%s\"}", role, password);
@@ -179,7 +181,7 @@ public class PhotoRessourceTest {
         response
                 .then()
                 .assertThat()
-                .body("name",equalTo("Henrik"));
+                .body("name",equalTo("Henrik.jpg"));
     }
 
     @Test
@@ -188,7 +190,7 @@ public class PhotoRessourceTest {
         assertEquals(200, res.getStatusCode());
         String json = res.asString();
         JsonPath jsonPath = new JsonPath(json);
-        assertEquals("Henrik", jsonPath.get("name"));
+        assertEquals("Henrik.jpg", jsonPath.get("name"));
     }
 
 //    @Test
@@ -228,7 +230,7 @@ public class PhotoRessourceTest {
     @Test
     public void postTest() {
         login("admin", "test");
-        Photo p = new Photo("Somewhere","Helge","TEXTEXT");
+        Photo p = new Photo("Helge.jpg","Somewhere","TEXTEXT");
         p.addTag(new Tag("Josephine"));
         PhotoDTO pdto = new PhotoDTO(p);
         String requestBody = GSON.toJson(pdto);
@@ -243,8 +245,8 @@ public class PhotoRessourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("name", equalTo("Helge"))
-                .body("tags", hasItems(hasEntry("name","Josephine")));
+                .body("name", equalTo("Helge.jpg"));
+//                .body("tags", hasItems(hasEntry("name","Josephine")));
     }
 
     @Test
@@ -265,9 +267,55 @@ public class PhotoRessourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("name", equalTo("Betty"))
+                .body("name", equalTo("Betty.jpg"))
                 .body("description", equalTo("NEW TEXT"))
                 .body("tags", hasItems(hasEntry("name","Alberta")));
+    }
+
+    @Test
+    public void updateTagsTest() {
+        login("admin", "test");
+        p1.addTag(new Tag("lilletest","lilledescription"));
+        p1.setPhotoTxt("NEW TEXT");
+        PhotoDTO pdto = new PhotoDTO(p1);
+        String requestBody = GSON.toJson(pdto);
+
+        Response response = given()
+                .header("Content-type", ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .put("/photo/"+p1.getFileName());
+
+        String json = response.prettyPrint();
+        System.out.println("Full JSON response: "+json);
+
+        List<TagDTO> dtos = response.jsonPath().getList("tags",TagDTO.class);
+        dtos.forEach(System.out::println);
+
+        // rest-assured uses Groovy under the hood: Groovy is a programming language based on java. The implicit variable 'it' holds the current word in the loop
+        // Useful Groovy methods and pointer: findAll(), find(), collect(), it (it is a keyword representing current item of the iterator
+        Map<String,List<String>> map = response.jsonPath().get("tags.find {it.name == 'Lilletest'}");//'Joseph'}"); //First letter of name is converted to capital
+        List<String> photos = (List<String>) map.get("photos");
+
+        assertThat("The tag doesnt contain this photo: ",photos.contains(p1.getFileName()));
+
+//        Assertions.assertEquals("3793", id);
+//
+//        given()
+//                .header("Content-type", ContentType.JSON)
+//                .header("x-access-token", securityToken)
+//                .and()
+//                .body(requestBody)
+//                .when()
+//                .put("/photo/"+p1.getFileName())
+//                .then()
+//                .assertThat()
+//                .statusCode(200)
+//                .body("name", equalTo("Henrik.jpg"))
+//                .body("description", equalTo("NEW TEXT"))
+//                .body("tags", hasItems(hasEntry("name","Lilletest")));
     }
 
     @Test
