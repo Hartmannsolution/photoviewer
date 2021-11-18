@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PhotoDTO;
 import dtos.TagDTO;
+import dtos.UserDTO;
 import entities.Photo;
 import entities.Role;
 import entities.User;
@@ -246,6 +247,49 @@ public class PhotoRessourceTest {
                 .assertThat()
                 .statusCode(200)
                 .body("name", equalTo("Helge.jpg"));
+//                .body("tags", hasItems(hasEntry("name","Josephine")));
+    }
+
+    @Test
+    public void postUserTest() {
+        login("admin", "test");
+        User u = new User("admino","add123");
+        u.addRole(new Role("admin"));
+        UserDTO dto = new UserDTO(u);
+        String requestBody = GSON.toJson(dto);
+        System.out.println("POSTTEST: "+requestBody);
+        given()
+                .header("Content-type", ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/photo/user")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("username", equalTo("admino"));
+//                .body("tags", hasItems(hasEntry("name","Josephine")));
+    }
+
+    @Test
+    public void postUserNoRolesTest() {
+        login("admin", "test");
+        User u = new User("admino","add123");
+        UserDTO dto = new UserDTO(u);
+        String requestBody = GSON.toJson(dto);
+        System.out.println("POSTTEST: "+requestBody);
+        given()
+                .header("Content-type", ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/photo/user")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("username", equalTo("admino"));
 //                .body("tags", hasItems(hasEntry("name","Josephine")));
     }
 

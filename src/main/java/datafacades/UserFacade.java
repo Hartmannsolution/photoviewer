@@ -40,6 +40,8 @@ public class UserFacade implements IDataFacade<UserDTO>{
     public UserDTO create(UserDTO user) {
         User u = new User(user.getUsername(), user.getPassword());
         EntityManager em = getEntityManager();
+        if(user.getRoles()==null)
+            user.addRole("user");
         user.getRoles().forEach(role->{
             Role r = em.find(Role.class,role);
             if(r!=null)

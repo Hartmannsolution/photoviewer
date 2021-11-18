@@ -84,7 +84,7 @@ public class PhotoFacade implements IDataFacade<Photo>{
         EntityManager em = getEntityManager();
         Photo found = em.find(Photo.class,photo.getFileName());
         if(photo.getFileName() == null || found == null)
-            throw new IllegalArgumentException("No Photo by that name. Not updated");
+            throw new EntityNotFoundException("No Photo by that name. Not updated");
         em.getTransaction().begin();
         if(photo.getPhotoTxt()!=null) found.setPhotoTxt(photo.getPhotoTxt());
         if(photo.getLocation()!=null) found.setLocation(photo.getLocation());

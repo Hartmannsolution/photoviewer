@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 @Path("login")
 public class LoginEndpoint {
 
-    public static final int TOKEN_EXPIRE_TIME = 1000 * 60 * 30; //30 min
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     public static final UserFacade USER_FACADE = UserFacade.getFacade(EMF);
 
@@ -54,7 +53,7 @@ public class LoginEndpoint {
             UserDTO user = USER_FACADE.getVeryfiedUser(username, password);
             user.getRoles().forEach(System.out::println);
             
-            String token = createToken(username, user.getRoles());
+            String token = utils.TokenFacade.createToken(username, user.getRoles());
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("username", username);
             responseJson.addProperty("token", token);
@@ -69,29 +68,6 @@ public class LoginEndpoint {
         throw new AuthenticationException("Invalid username or password! Please try again");
     }
 
-    private String createToken(String userName, List<String> roles) throws JOSEException {
 
-        StringBuilder res = new StringBuilder();
-        for (String string : roles) {
-            res.append(string);
-            res.append(",");
-        }
-        String rolesAsString = res.length() > 0 ? res.substring(0, res.length() - 1) : "";
-        String issuer = "semesterstartcode-dat3";
 
-        JWSSigner signer = new MACSigner(SharedSecret.getSharedKey());
-        Date date = new Date();
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(userName)
-                .claim("username", userName)
-                .claim("roles", rolesAsString)
-                .claim("issuer", issuer)
-                .issueTime(date)
-                .expirationTime(new Date(date.getTime() + TOKEN_EXPIRE_TIME))
-                .build();
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
-        signedJWT.sign(signer);
-        return signedJWT.serialize();
-
-    }
 }

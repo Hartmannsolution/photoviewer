@@ -154,6 +154,12 @@ class PhotoFacadeTest {
         int actual = p.getTags().size();
         assertEquals(expected,actual);
     }
+    @Test
+    void updateWithNonExisting() throws EntityNotFoundException {
+        System.out.println("Testing Update(Photo p) Non existing");
+
+        assertThrows(EntityNotFoundException.class, ()->facade.update(new Photo("test","test2","test3")));
+    }
     @Test //Test if adding a single new Tag will remove the existing ones as it should
     void updateWithNewTag() throws EntityNotFoundException {
         System.out.println("Testing Update(Photo p) with new Tag and removing others p1 tags before: "+p1.getTags());

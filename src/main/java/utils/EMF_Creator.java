@@ -41,7 +41,7 @@ public class EMF_Creator {
             System.out.println("USING ENVIRONMENT VARIABLES");
             System.out.println("DEPLOYED       -->" + System.getenv("DEPLOYED"));
             System.out.println("USER           -->" + System.getenv("USER"));
-            System.out.println("PW             -->" + System.getenv("PW"));
+//            System.out.println("PW             -->" + System.getenv("PW"));
             System.out.println("CONNECTION_STR -->" + System.getenv("CONNECTION_STR"));
             String user = System.getenv("USER");
             String pw = System.getenv("PW");

@@ -12,6 +12,7 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.HashSet;
 import java.util.List;
 
 public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
@@ -30,11 +31,18 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
         }
         return instance;
     }
+    //For testing purposes
+    public static IDataFacade<PhotoDTO> getFacade(EntityManagerFactory emf) {
+        photoFacade = PhotoFacade.getFacade(emf);
+        instance = new PhotoDTOFacade();
+        return instance;
+    }
 
-    private Photo getEntity(PhotoDTO dto){
+    private Photo getEntity(PhotoDTO dto) {
         EntityManager em = EMF.createEntityManager();
         Photo photo = em.find(Photo.class, dto.getName());
-
+//        if(photo==null)
+//            throw new EntityNotFoundException("Could not find the photo with name: "+dto.getName());
         if (photo == null){
             photo = new Photo(dto.getName(), dto.getLocation(), dto.getDescription());
 //            final Photo p = photo; //p must be final to work inside lambda
@@ -48,17 +56,22 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
 
         }
         final Photo p = photo; //p must be final to work inside lambda
+        if(photo.getTags()==null)
+            photo.setTags(new HashSet<>());
         photo.getTags().clear();
-        dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
+        if (dto.getTags()!=null && dto.getTags().size()==0)
+            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
 //        System.out.println("PHOTO DTO FACADEN getEntity(photo)");
 //        dto.getTags().forEach(System.out::println);
 //        System.out.println("END");
         return p;
     }
 
-    private Tag getEntity(TagDTO dto){
+    private Tag getEntity(TagDTO dto)  {
         EntityManager em = EMF.createEntityManager();
         Tag tag = em.find(Tag.class, dto.getName());
+//        if(tag==null)
+//            throw new EntityNotFoundException("Cannot find Tag with name: "+dto.getName());
         if (tag == null)
             tag = new Tag(dto.getName());
         return tag;

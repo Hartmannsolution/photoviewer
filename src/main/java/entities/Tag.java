@@ -57,7 +57,7 @@ public class Tag {
                 .stream(name.split(" "))
                 .map(this::capitalizeFirst)
 //                .reduce("", (acc,element)->acc.concat(" "+element));
-                .collect(joining(" "));
+                .collect(joining(""));
         this.name = newName;
     }
 

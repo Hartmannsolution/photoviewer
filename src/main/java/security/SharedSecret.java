@@ -7,24 +7,17 @@ import java.security.SecureRandom;
  * For production (and if a load-balancer is used) come up with a persistent key strategy */
 public class SharedSecret {
     private static byte[] secret;
+
     public static byte[] getSharedKey() {
-      /*
-        System.out.println("******************* IMPORTANT ******************'");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("**** REMOVE FIXED SECRET BEFORE PRODUCTION *******");
-        System.out.println("****      See security.SharedSecret        *******");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        */
-        //REMOVE BEFORE PRODUCTION
-        if(true){
-            return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".getBytes();
+
+        String jwtSecret = System.getenv("JWT_SECRET");
+        if (jwtSecret == null) {
+//            secret = new byte[32];
+//            new SecureRandom().nextBytes(secret);
+//            return secret;
+            return "ALKJHUIOSWW=ILDEOKLDWEDLKSKDLKJHEHDDHDDHSKSLSNCBXMXMSLDKKDNXMXNDNDFDKSLEIDJDKSLCSLSÆAJDIEIFKDSKEJDI".getBytes();
+        } else {
+            return jwtSecret.getBytes();
         }
-        if (secret == null) {  //Or better read as an environment variable set on production server
-            secret = new byte[32];
-            new SecureRandom().nextBytes(secret);
-        }
-        return secret;
     }
 }

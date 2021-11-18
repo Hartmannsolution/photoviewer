@@ -28,6 +28,9 @@ public class UserPrincipal implements Principal {
   public String getName() {
     return username;
   }
+  public List<String> getRoles() {
+    return roles;
+  }
 
   public boolean isUserInRole(String role) {
     return this.roles.contains(role);

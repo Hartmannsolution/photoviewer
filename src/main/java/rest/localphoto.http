@@ -10,14 +10,26 @@ Content-Type: application/json
 
 PUT http://localhost:8080/photoviewer/api/photo/Joergensen_0001_TN.jpg
 Content-Type: application/json
-x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2MzcxNTkyOTYsImlhdCI6MTYzNzE1NzQ5NiwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.zPFzXW3VUmRYQsxqAs-bmbZMx17AzGZCMXIQJMRoFjU
+x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2MzcyNDc1NjMsImlhdCI6MTYzNzI0NTc2MywiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.ax8nRCp1Y7JfoIfpnHoVcZKcbPd9OCnHxvc_BIm3Lf8
 
 {
   "location": "https://h-mogensen.dk/Joergensen/",
-  "name": "Joergensen_0001_TN.jpg",
+  "name": "AAAAAA",
   "viewNo": 2,
+  "description": "DETTE EER EN TEST",
+  "tags": [{"name":"mors"},{"name":"thOrkild22"}, {"name":"hello"}]
+}
+
+###
+POST http://localhost:8080/photoviewer/api/photo/
+Content-Type: application/json
+x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2MzcyNDc1NjMsImlhdCI6MTYzNzI0NTc2MywiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.ax8nRCp1Y7JfoIfpnHoVcZKcbPd9OCnHxvc_BIm3Lf8
+
+{
+  "location": "https://h-mogensen.dk/Joergensen/",
+  "name": "AAAAAA",
   "description": "Købmandsgården i Sønder Dråby, Mors. Maleri",
-  "tags": [{"name":"mors"},{"name":"thOrkild22"}, {"name":"hello test"}]
+  "tags": [{"name":"mors"},{"name":"thOrkild22"}, {"name":"hello"}]
 }
 
 ###

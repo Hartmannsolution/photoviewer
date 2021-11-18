@@ -52,6 +52,9 @@ public class UserDTO {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
 
     @Override
     public String toString() {

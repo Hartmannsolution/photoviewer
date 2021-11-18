@@ -38,7 +38,6 @@ public class JWTAuthenticationFilter implements ContainerRequestFilter {
  @Override   
  public void filter(ContainerRequestContext request) throws IOException {
    if (isSecuredResource()) {
-
      String token = request.getHeaderString("x-access-token");//
      if (token == null) {
        request.abortWith(errorhandling.GenericExceptionMapper.makeErrRes("Not authenticated - do login", 403));
@@ -70,25 +69,42 @@ public class JWTAuthenticationFilter implements ContainerRequestFilter {
    return false;
  }
 
- private UserPrincipal getUserPrincipalFromTokenIfValid(String token)
-         throws ParseException, JOSEException, AuthenticationException {
+ private UserPrincipal getUserPrincipalFromTokenIfValid(String token) throws ParseException, JOSEException, AuthenticationException {
    SignedJWT signedJWT = SignedJWT.parse(token);
    //Is it a valid token (generated with our shared key)
    JWSVerifier verifier = new MACVerifier(SharedSecret.getSharedKey());
 
+    if(tokenSoonExpired(signedJWT)){
+        //TODO: implement renew token
+    }
    if (signedJWT.verify(verifier)) {
      if (new Date().getTime() > signedJWT.getJWTClaimsSet().getExpirationTime().getTime()) {
        throw new AuthenticationException("Your Token is no longer valid");
      }
-     String roles = signedJWT.getJWTClaimsSet().getClaim("roles").toString();
-     String username = signedJWT.getJWTClaimsSet().getClaim("username").toString();
-     
-     String[] rolesArray = roles.split(",");
-     
-     return new UserPrincipal(username, rolesArray);
+     return jwt2user(signedJWT);
 //     return new UserPrincipal(username, roles);
    } else {
      throw new JOSEException("User could not be extracted from token");
    }
+ }
+
+ private boolean tokenSoonExpired(SignedJWT signedJWT) throws ParseException, JOSEException {
+
+//     if (new Date().getTime() > signedJWT.getJWTClaimsSet().getExpirationTime().getTime()-1000*60*5) { //If less than 5 minutes to expire
+//         UserPrincipal user = jwt2user(signedJWT);
+//         return utils.TokenFacade.createToken(user.getName(), user.getRoles());
+//     }
+
+
+     return  (new Date().getTime() > signedJWT.getJWTClaimsSet().getExpirationTime().getTime()-1000*60*5);
+ }
+
+ private UserPrincipal jwt2user(SignedJWT jwt) throws ParseException {
+     String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
+     String username = jwt.getJWTClaimsSet().getClaim("username").toString();
+
+     String[] rolesArray = roles.split(",");
+
+     return new UserPrincipal(username, rolesArray);
  }
 }
