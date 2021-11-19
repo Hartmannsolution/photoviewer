@@ -125,8 +125,8 @@ public class PhotoFacade implements IDataFacade<Photo>{
         emf = EMF_Creator.createEntityManagerFactory();
         IDataFacade fe = getFacade(emf);
 //        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
-        Photo newP = new Photo("Joergensen_0001_TN.jpg","","");
-        Photo newP2 = new Photo("Helge333333","","");
+        Photo newP = new Photo("Joergensen_0001_TN.jpg","","","");
+        Photo newP2 = new Photo("Helge333333","","","");
 //        try {
 //            fe.create(newP);
 //        } catch (API_Exception e) {

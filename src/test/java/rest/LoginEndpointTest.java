@@ -132,7 +132,7 @@ public class LoginEndpointTest {
     @Test
     public void testRestForAdmin() {
         login("admin", "test");
-        Photo p = new Photo("Somewhere","Helge","TEXTEXT");
+        Photo p = new Photo("Somewhere","Helge","TEXTEXT","title1");
         p.addTag(new Tag("Josephine"));
         PhotoDTO pdto = new PhotoDTO(p);
         String requestBody = GSON.toJson(pdto);

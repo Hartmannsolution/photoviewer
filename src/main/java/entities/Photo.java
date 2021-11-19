@@ -54,11 +54,12 @@ public class Photo {
     public Photo() {
     }
 
-    public Photo(String fileName, String location, String photoTxt) {
+    public Photo(String fileName, String location, String photoTxt, String title) {
         if(fileName.length()>2)
             this.fileName = fileName;
         this.location = location;
         this.photoTxt = photoTxt;
+        this.title = title;
     }
 
     // Database is not set to handle dates, so I do it with JPA lifecycle methods. For more see: https://www.baeldung.com/jpa-entity-lifecycle-events

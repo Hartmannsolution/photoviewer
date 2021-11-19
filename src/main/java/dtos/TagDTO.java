@@ -28,7 +28,7 @@ public class TagDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TagDTO tagDTO = (TagDTO) o;
-        return Objects.equals(name, tagDTO.name);
+        return name.equals(tagDTO.name) && description.equals(tagDTO.description);
     }
 
     public String getName() {
