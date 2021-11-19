@@ -54,7 +54,7 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
             if(dto.getLocation()!=null) photo.setLocation(dto.getLocation());
             if(dto.getViewNo()!=0) photo.setViewNo(dto.getViewNo());
             if(dto.getDescription()!=null) photo.setPhotoTxt(dto.getDescription());
-            if(dto.getTitle()!=null) photo.setTitle(dto.getDescription());
+            if(dto.getTitle()!=null) photo.setTitle(dto.getTitle());
 
         }
         final Photo p = photo; //p must be final to work inside lambda
