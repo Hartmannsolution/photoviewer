@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.BeforeAll;
 
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 public class PhotoRessourceTest {
 
     private static final int SERVER_PORT = 7777;
@@ -296,7 +296,7 @@ public class PhotoRessourceTest {
     @Test
     public void updateTest() {
         login("admin", "test");
-        p2.addTag(t2);
+        p2.addTag(t2); //alberta
         p2.setPhotoTxt("NEW TEXT");
         PhotoDTO pdto = new PhotoDTO(p2);
         String requestBody = GSON.toJson(pdto);

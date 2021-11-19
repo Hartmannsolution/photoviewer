@@ -12,6 +12,7 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -56,11 +57,12 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
 
         }
         final Photo p = photo; //p must be final to work inside lambda
-        if(photo.getTags()==null)
-            photo.setTags(new HashSet<>());
+//        if(photo.getTags()==null)
+//            photo.setTags(new HashSet<>());
         photo.getTags().clear();
-        if (dto.getTags()!=null && dto.getTags().size()==0)
-            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
+        if(dto.getTags()==null)
+            dto.setTags(new ArrayList<>());
+        dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
 //        System.out.println("PHOTO DTO FACADEN getEntity(photo)");
 //        dto.getTags().forEach(System.out::println);
 //        System.out.println("END");
