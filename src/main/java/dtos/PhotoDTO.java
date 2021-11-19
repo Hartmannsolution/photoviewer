@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class PhotoDTO {
     private String location;
     private String name;
-    private int viewNo;
+    private int viewno;
     private String title;
     private String description;
     private List<TagDTO> tags = new ArrayList();
@@ -18,7 +18,7 @@ public class PhotoDTO {
     public PhotoDTO(Photo photo) {
         this.location = photo.getLocation();
         this.name = photo.getFileName();
-        this.viewNo = photo.getViewNo();
+        this.viewno = photo.getViewNo();
         this.title = photo.getTitle();
         this.description = photo.getPhotoTxt();
         photo.getTags().forEach(tag->this.tags.add(new TagDTO(tag)));
@@ -45,11 +45,11 @@ public class PhotoDTO {
     }
 
     public int getViewNo() {
-        return viewNo;
+        return viewno;
     }
 
     public void setViewNo(int viewNo) {
-        this.viewNo = viewNo;
+        this.viewno = viewNo;
     }
 
     public String getDescription() {
@@ -94,7 +94,7 @@ public class PhotoDTO {
         return "PhotoDTO{" +
                 "location='" + location + '\'' +
                 ", name='" + name + '\'' +
-                ", viewNo=" + viewNo +
+                ", viewNo=" + viewno +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
