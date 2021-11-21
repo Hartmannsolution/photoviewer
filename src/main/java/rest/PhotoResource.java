@@ -91,6 +91,7 @@ public class PhotoResource {
     @RolesAllowed("admin")
     public Response update(@PathParam("id") String id, String content) throws EntityNotFoundException {
         PhotoDTO pdto = GSON.fromJson(content, PhotoDTO.class);
+        pdto.setName(id);
         PhotoDTO updated = PHOTO_FACADE .update(pdto);
         return Response.ok().entity(GSON.toJson(updated)).build();
     }

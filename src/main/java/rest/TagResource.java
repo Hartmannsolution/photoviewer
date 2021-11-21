@@ -36,13 +36,13 @@ public class TagResource {
         return Response.ok().entity(GSON.toJson(t)).build();
     }
 
-    @GET
-    @Path("/allTags")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getAllTags() {
-        List<TagDTO> tagDtos = TAG_FACADE.getAll();
-        return Response.ok().entity(GSON.toJson(tagDtos)).build();
-    }
+//    @GET
+//    @Path("/allTags")
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public Response getAllTags() {
+//        List<TagDTO> tagDtos = TAG_FACADE.getAll();
+//        return Response.ok().entity(GSON.toJson(tagDtos)).build();
+//    }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -61,6 +61,7 @@ public class TagResource {
     @RolesAllowed("admin")
     public Response update(@PathParam("id") String id, String content) throws EntityNotFoundException {
         TagDTO pdto = GSON.fromJson(content, TagDTO.class);
+        pdto.setName(id);
         TagDTO updated = TAG_FACADE .update(pdto);
         return Response.ok().entity(GSON.toJson(updated)).build();
     }

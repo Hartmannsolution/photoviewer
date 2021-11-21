@@ -94,6 +94,7 @@ class TagFacadeTest {
         t2.setDescription("HOHOHO");
         Tag expected = t2;
         Tag actual = facade.update(t2);
+        System.out.println("ACTUAL"+actual);
         assertEquals(expected,actual);
     }
 

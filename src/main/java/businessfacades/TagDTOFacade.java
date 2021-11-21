@@ -4,6 +4,7 @@ import datafacades.IDataFacade;
 import datafacades.TagFacade;
 import dtos.TagDTO;
 import dtos.TagDTO;
+import entities.Photo;
 import entities.Tag;
 import entities.Tag;
 import errorhandling.API_Exception;
@@ -45,6 +46,14 @@ public class TagDTOFacade implements IDataFacade<TagDTO>{
         Tag tag = em.find(Tag.class, dto.getName());
         if (tag == null)
             tag = new Tag(dto.getName(), dto.getDescription());
+        else{
+            tag.setDescription(dto.getDescription());
+            final Tag t = tag;
+            if(dto.getPhotos()!=null)
+                dto.getPhotos().forEach(photo->t.addPhoto(em.find(Photo.class, photo)));
+            tag = t;
+        }
+
         return tag;
     }
 

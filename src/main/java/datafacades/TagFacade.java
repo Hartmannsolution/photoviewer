@@ -79,7 +79,7 @@ public class TagFacade implements IDataFacade<Tag>{
         System.out.println(tag);
         EntityManager em = getEntityManager();
         if (tag.getName() == null)
-            throw new IllegalArgumentException("No Tag by that name. Not updated");
+            throw new EntityNotFoundException("No Tag by that name. Not updated");
         em.getTransaction().begin();
         Tag t = em.merge(tag);
         System.out.println(t);
