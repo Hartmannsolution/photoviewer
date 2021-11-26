@@ -20,7 +20,7 @@ public class Photo {
     @Column(name = "title")//, nullable = false, length = 35)
     private String title;
 
-    @Column(name = "VisNr", updatable = false)
+    @Column(name = "VisNr") //, updatable = false)
     private int viewNo;
 
     @Lob

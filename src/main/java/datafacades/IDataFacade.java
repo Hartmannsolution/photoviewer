@@ -12,5 +12,5 @@ public interface IDataFacade<T> {
     List<T> getAll();
     T update(T t) throws EntityNotFoundException;
     T delete(String id) throws EntityNotFoundException;
-    List<T> findByProperty(String property, String propValue);
+    List<T> findByProperty(String property, String propValue) throws EntityNotFoundException;
 }

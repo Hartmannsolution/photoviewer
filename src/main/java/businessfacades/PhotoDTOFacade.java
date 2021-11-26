@@ -110,7 +110,7 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
     }
 
     @Override
-    public List<PhotoDTO> findByProperty(String property, String propValue) {
+    public List<PhotoDTO> findByProperty(String property, String propValue) throws EntityNotFoundException {
         return PhotoDTO.toList(photoFacade.findByProperty(property, propValue));
     }
 }

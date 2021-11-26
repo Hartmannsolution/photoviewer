@@ -3,6 +3,7 @@ package facades;
 import datafacades.IDataFacade;
 import datafacades.TagFacade;
 import datafacades.TagFacade;
+import entities.Photo;
 import entities.Tag;
 import entities.Tag;
 import errorhandling.API_Exception;
@@ -78,6 +79,28 @@ class TagFacadeTest {
         System.out.println("Testing getAll()");
         int expected = 2;
         int actual = facade.getAll().size();
+        assertEquals(expected,actual);
+    }
+    @Test
+    void getByProp() throws EntityNotFoundException {
+        System.out.println("Testing getByProperty(String property, String value)");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Tag tag3 = new Tag("Helmut", "Boede i Nørregade i 40erne");
+        Tag tag4 = new Tag("Helga", "Kendte onkel jørgen som barn");
+        Photo photo = new Photo("Test", "Loc", "Desc", "Title");
+        Photo photo2 = new Photo("Test2", "Loc2", "Desc2", "Title2");
+        em.persist(photo2);
+        em.persist(photo);
+        em.persist(tag3);
+        em.persist(tag4);
+        photo.addTag(t1);
+        photo.addTag(t2);
+        photo.addTag(tag3);
+        photo2.addTag(tag4);
+        em.getTransaction().commit();
+        int expected = 3;
+        int actual = facade.findByProperty("photoLocation", "Loc").size();
         assertEquals(expected,actual);
     }
 @Test

@@ -24,7 +24,13 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/familyphotos?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
             <property name="javax.persistence.jdbc.user" value="dev"/>
             <property name="javax.persistence.jdbc.password" value="ax2"/>
-            
+
+            <!--To be able to run queries in the JPA editor-->
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/familyphotos"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.user" value="dev"/>
+            <property name="eclipselink.jdbc.password" value="ax2"/>
+
         </properties>
     </persistence-unit>
     

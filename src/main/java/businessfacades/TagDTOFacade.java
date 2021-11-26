@@ -86,7 +86,7 @@ public class TagDTOFacade implements IDataFacade<TagDTO>{
     }
 
     @Override
-    public List<TagDTO> findByProperty(String property, String propValue) {
+    public List<TagDTO> findByProperty(String property, String propValue) throws EntityNotFoundException {
         return TagDTO.toList(tagFacade.findByProperty(property, propValue));
     }
 }

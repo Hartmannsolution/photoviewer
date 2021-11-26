@@ -122,20 +122,33 @@ public class TagFacade implements IDataFacade<Tag>{
 //        fe.create(new Tag("Else"));
     }
 
+//    @Override
+//    public List<Tag> findByProperty(String property, String propValue) {
+//        String baseUrl = null;
+//        try {
+//            baseUrl = utils.Utility.readFileProperty("BASEURL");
+//            System.out.println("LOKALITET:"+baseUrl);
+//
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        EntityManager em = getEntityManager();
+//        TypedQuery<Tag> q = em.createQuery("SELECT t FROM Tag t WHERE t."+property+" =:val", Tag.class);
+//        q.setParameter("val", baseUrl+propValue+"/");
+//        return q.getResultList();
+//    }
+
     @Override
-    public List<Tag> findByProperty(String property, String propValue) {
-        String baseUrl = null;
-        try {
-            baseUrl = utils.Utility.readFileProperty("BASEURL");
-            System.out.println("LOKALITET:"+baseUrl);
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public List<Tag> findByProperty(String property, String propValue) throws EntityNotFoundException {
         EntityManager em = getEntityManager();
-        TypedQuery<Tag> q = em.createQuery("SELECT t FROM Tag t WHERE t."+property+" =:val", Tag.class);
-        q.setParameter("val", baseUrl+propValue+"/");
-        return q.getResultList();
+        switch(property) {
+          case "photoLocation":
+            TypedQuery<Tag> q = em.createQuery("SELECT t FROM Tag t join t.photos p WHERE p.location = :location", Tag.class);
+            q.setParameter("location", propValue);
+            return q.getResultList();
+          default:
+            throw new EntityNotFoundException("No such property exist on tag");
+        }
     }
     
 }

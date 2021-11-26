@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * created by THA
  * Purpose of this facade example is to show a facade used as a DB facade (only operating on entity classes - no DTOs
- * And to show case some different scenarios
+ * And to showcase some different scenarios
  */
 public class PhotoFacade implements IDataFacade<Photo>{
 
@@ -28,10 +28,10 @@ public class PhotoFacade implements IDataFacade<Photo>{
 
     //Private Constructor to ensure Singleton
     private PhotoFacade() {}
-    
-    
+
+
     /**
-     * 
+     *
      * @param _emf
      * @return an instance of this facade class.
      */
@@ -85,6 +85,8 @@ public class PhotoFacade implements IDataFacade<Photo>{
         Photo found = em.find(Photo.class,photo.getFileName());
         if(photo.getFileName() == null || found == null)
             throw new EntityNotFoundException("No Photo by that name. Not updated");
+        if(photo.getViewNo()!=found.getViewNo()) //If viewno has changed all photos view no must change accordingly.
+            reOrderAll(photo);
         em.getTransaction().begin();
         if(photo.getPhotoTxt()!=null) found.setPhotoTxt(photo.getPhotoTxt());
         if(photo.getLocation()!=null) found.setLocation(photo.getLocation());
@@ -109,6 +111,26 @@ public class PhotoFacade implements IDataFacade<Photo>{
         em.getTransaction().commit();
         return p;
     }
+    private void reOrderAll(Photo photo){
+        EntityManager em = getEntityManager();
+//        Photo found = em.find(Photo.class,photo.getFileName());
+//        int index = photos.indexOf(found);
+//        photos.set(index,photo);
+        em.getTransaction().begin();
+        em.merge(photo);
+        List<Photo> photos = em.createQuery("SELECT p FROM Photo p",Photo.class).getResultList();
+        photos.sort((a,b)->{
+            return a.getViewNo() - b.getViewNo();
+        });
+        photos.forEach(System.out::println);
+        for(int i = 0; i < photos.size(); i++){
+            Photo p = photos.get(i);
+            p.setViewNo(i*2);
+        }
+        em.flush();
+        em.getTransaction().commit();
+        em.close();
+    }
 
     @Override
     public Photo delete(String id) throws EntityNotFoundException{
@@ -125,20 +147,22 @@ public class PhotoFacade implements IDataFacade<Photo>{
     public static void main(String[] args) throws EntityNotFoundException {
         emf = EMF_Creator.createEntityManagerFactory();
         IDataFacade fe = getFacade(emf);
-//        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
-        Photo newP = new Photo("Joergensen_0001_TN.jpg","","","");
-        Photo newP2 = new Photo("Helge333333","","","");
-//        try {
-//            fe.create(newP);
-//        } catch (API_Exception e) {
-//            e.printStackTrace();
-//        }
-//        newP.addTag(new Tag("Hello Test"));
-        newP.addTag(new Tag("Mors"));
-        newP2.addTag((new Tag("Børge Artmann")));
-//        newP.addTag(new Tag("thOrkild22"));
-//        newP.addTag(new Tag("hello test"));
-        System.out.println(fe.update(newP));
+////        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
+//        Photo newP = new Photo("Joergensen_0001_TN.jpg","","","");
+//        Photo newP2 = new Photo("Helge333333","","","");
+////        try {
+////            fe.create(newP);
+////        } catch (API_Exception e) {
+////            e.printStackTrace();
+////        }
+////        newP.addTag(new Tag("Hello Test"));
+//        newP.addTag(new Tag("Mors"));
+//        newP2.addTag((new Tag("Børge Artmann")));
+////        newP.addTag(new Tag("thOrkild22"));
+////        newP.addTag(new Tag("hello test"));
+//        System.out.println(fe.update(newP));
+        Photo photo = emf.createEntityManager().find(Photo.class,"Joergensen_0003_TN.jpg");
+        new PhotoFacade().reOrderAll(photo);
 
     }
 
@@ -165,7 +189,7 @@ public class PhotoFacade implements IDataFacade<Photo>{
         try {
             baseUrl = utils.Utility.readFileProperty("BASEURL");
             System.out.println("LOKALITET:"+baseUrl);
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -174,5 +198,5 @@ public class PhotoFacade implements IDataFacade<Photo>{
         q.setParameter("val", baseUrl+propValue+"/");
         return q.getResultList();
     }
-    
+
 }

@@ -274,7 +274,7 @@ PROTECTED
 
 <td>
 <pre>
-<br/>PUT: /api/tag/{name}<br/>
+<br/>PUT: /api/photo/{name}<br/>
 </pre>
 </td>
 
@@ -283,7 +283,9 @@ PROTECTED
 {
   "location": "Somewhere", 
   "name": "some name",       (mandatory)
-  "description": "Some text"
+  "description": "Some text",
+"tags":["tagName"],
+"viewno":2
 }
 
 </pre>
@@ -299,6 +301,7 @@ PROTECTED
 </td>
 <td>
 PROTECTED
+Updating the viewno will change viewno for all other images
 </td>
 </tr>
 <!-- ########## DELETE PHOTO ####################-->
@@ -331,4 +334,7 @@ PROTECTED
 
 </table>
 
-## Project can be seen here: TODO
+## Project can be seen here: 
+### TODO
+1. Add list of old image descriptions (maybe tag descriptions to) with username, to see who wrote what
+2. 
