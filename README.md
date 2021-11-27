@@ -1,6 +1,11 @@
 # Photo viewer
 This project is a backend application to show photos with description, view no and tags
 
+## Lessons learned
+1. To use JPQL in intellij it is necessary to add the eclipselink persistense info. But this will create an impossible error to debug on the server.
+2. When merging entities with relation to collections of other entities us a SET to avoid sql error duplicate key in the merge table.
+3. 
+
 ## API Documentation 
 All endpoints are to be found on this URL: https://edu.bugelhartmann.dk/photoviewer/
 <table>

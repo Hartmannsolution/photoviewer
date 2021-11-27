@@ -16,7 +16,7 @@ public class Tag {
 
 //    If the "mappedBy" option is not found in any of the related entities JPA will define BOTH entities as the relationship owners: https://enos.itcollege.ee/~jpoial/java/naited/JPA_Mini_Book.pdf
     @ManyToMany(mappedBy = "tags") //, cascade = CascadeType.PERSIST) //, fetch = FetchType.EAGER) //Target side of relationsship (inverse side)
-    private List<Photo> photos = new ArrayList();
+    private Set<Photo> photos = new HashSet<>();
 
     public Tag() {
     }
@@ -37,13 +37,9 @@ public class Tag {
         this.description = description;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new Tag("ho hi ha hIhi"));
-    }
-
     private String capitalizeFirst(String s){
         s = s.toLowerCase();
-        if (s.length() == 0 || s == null)
+        if (s.length() == 0)
             return "";
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
@@ -53,19 +49,18 @@ public class Tag {
     }
 
     public void setName(String name) {
-        String newName = Arrays
+        this.name = Arrays
                 .stream(name.split(" "))
                 .map(this::capitalizeFirst)
 //                .reduce("", (acc,element)->acc.concat(" "+element));
                 .collect(joining(""));
-        this.name = newName;
     }
 
-    public List<Photo> getPhotos() {
+    public Set<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<Photo> photos) {
+    public void setPhotos(Set<Photo> photos) {
         this.photos = photos;
     }
     public void addPhoto(Photo photo) {

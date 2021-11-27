@@ -90,7 +90,7 @@ public class PhotoFacade implements IDataFacade<Photo>{
         em.getTransaction().begin();
         if(photo.getPhotoTxt()!=null) found.setPhotoTxt(photo.getPhotoTxt());
         if(photo.getLocation()!=null) found.setLocation(photo.getLocation());
-        if(photo.getViewNo()!=0) found.setViewNo(photo.getViewNo());
+//        if(photo.getViewNo()!=0) found.setViewNo(photo.getViewNo());
         if(photo.getTitle()!=null) found.setTitle(photo.getTitle());
         //If photo has any tags, then those are the ones that count.
         if(photo.getTags()!=null && photo.getTags().size()!=0) {
