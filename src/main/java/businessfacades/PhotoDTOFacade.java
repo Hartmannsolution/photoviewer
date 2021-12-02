@@ -45,7 +45,7 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
 //        if(photo==null)
 //            throw new EntityNotFoundException("Could not find the photo with name: "+dto.getName());
         if (photo == null){
-            photo = new Photo(dto.getName(), dto.getLocation(), dto.getDescription(), dto.getTitle());
+            photo = new Photo(dto.getName(), dto.getLocation(), dto.getDescription(), dto.getTitle(), dto.getViewNo());
 //            final Photo p = photo; //p must be final to work inside lambda
 //            dto.getTags().forEach(tag->p.addTag(getEntity(tag))); //Changed photo.tags to Set to avoid duplicates
         }

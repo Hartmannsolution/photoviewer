@@ -44,8 +44,8 @@ class PhotoFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Tag.deleteAllRows").executeUpdate();
             em.createNamedQuery("Photo.deleteAllRows").executeUpdate();
-            p1 = new Photo("photo1","Somewhere", "Dette er et meget gammelt billede","ny title");
-            p2 = new Photo("photo2","Some file name", "Dette er et billede af noget","new title");
+            p1 = new Photo("photo1","Somewhere", "Dette er et meget gammelt billede","ny title",2);
+            p2 = new Photo("photo2","Some file name", "Dette er et billede af noget","new title",4);
             t1 = new Tag("Dorthea");
             t2 = new Tag("Frederik");
             t3 = new Tag("Tag3");
@@ -69,7 +69,7 @@ class PhotoFacadeTest {
     @Test
     void create() {
         System.out.println("Testing create(Photo p)");
-        Photo p = new Photo("Somewhere","TestPhoto", "Something","any title");
+        Photo p = new Photo("Somewhere","TestPhoto", "Something","any title",6);
         Photo expected = p;
         Photo actual   = null;
         try {
@@ -83,7 +83,7 @@ class PhotoFacadeTest {
     @Test
     void createWithTags() {
         System.out.println("Testing create(Photo p) with tags added");
-        Photo p = new Photo("Somewhere","TestPhoto", "description","some title");
+        Photo p = new Photo("Somewhere","TestPhoto", "description","some title",5);
         p.addTag(new Tag("Alfred"));
         p.addTag(new Tag("Roberta"));
         Photo expected = p;
@@ -99,7 +99,7 @@ class PhotoFacadeTest {
     @Test
     void createWithKnownTags() {
         System.out.println("Testing create(Photo p) with Tags added");
-        Photo p = new Photo("Somewhere","TestPhoto","Something","some title");
+        Photo p = new Photo("Somewhere","TestPhoto","Something","some title",4);
         p.addTag(t1);
         p.addTag(t2);
         Photo expected = p;
@@ -158,7 +158,7 @@ class PhotoFacadeTest {
     void updateWithNonExisting() throws EntityNotFoundException {
         System.out.println("Testing Update(Photo p) Non existing");
 
-        assertThrows(EntityNotFoundException.class, ()->facade.update(new Photo("test","test2","test3", "test4")));
+        assertThrows(EntityNotFoundException.class, ()->facade.update(new Photo("test","test2","test3", "test4",4)));
     }
     @Test //Test if adding a single new Tag will remove the existing ones as it should
     void updateWithNewTag() throws EntityNotFoundException {
@@ -174,7 +174,18 @@ class PhotoFacadeTest {
     @Test //Test if ignoring tags will remove the existing ones as it should not
     void updateWithNoTag() throws EntityNotFoundException {
         System.out.println("Testing Update(Photo p) with new Tag and removing others p1 tags before: "+p1.getTags());
-        Photo photo = new Photo("photo1", "loc", "desc", "title");
+        Photo photo = new Photo("photo1", "loc", "desc", "title",2);
+
+        Photo p = facade.update(photo);
+        int expected = 1;
+        int actual = p.getTags().size();
+        assertEquals(expected,actual);
+    }
+
+    @Test //Test if ignoring tags will remove the existing ones as it should not
+    void updateWithNoTagAndChangedViewno() throws EntityNotFoundException {
+        System.out.println("Testing Update(Photo p) with no Tag and not removing other p1 tags : "+p1.getTags());
+        Photo photo = new Photo("photo1", "loc", "desc", "title",10);
 
         Photo p = facade.update(photo);
         int expected = 1;

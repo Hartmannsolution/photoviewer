@@ -55,7 +55,9 @@ public class PhotoResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getByProperty(@PathParam("propname") String propName, @PathParam("propvalue") String propValue) throws EntityNotFoundException {
-        System.out.println("GET BY PROPERTY: "+propName+": "+propValue);
+//        System.out.println("GET BY PROPERTY: "+propName+": "+propValue);
+//        if(propName == "location" && propValue == "all")
+//            return Response.ok().entity(GSON.toJson(PHOTO_FACADE.getAll())).build();
         List<PhotoDTO> photos = PHOTO_FACADE .findByProperty(propName, propValue);
         return Response.ok().entity(GSON.toJson(photos)).build();
     }

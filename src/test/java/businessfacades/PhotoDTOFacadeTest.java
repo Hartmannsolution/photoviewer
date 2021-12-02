@@ -41,8 +41,8 @@ class PhotoDTOFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Tag.deleteAllRows").executeUpdate();
             em.createNamedQuery("Photo.deleteAllRows").executeUpdate();
-            p1 = new Photo("photo1","Somewhere", "Dette er et meget gammelt billede","title1");
-            p2 = new Photo("photo2","Some file name", "Dette er et billede af noget", "title2");
+            p1 = new Photo("photo1","Somewhere", "Dette er et meget gammelt billede","title1", 2);
+            p2 = new Photo("photo2","Some file name", "Dette er et billede af noget", "title2", 4);
             t1 = new Tag("Dorthea");
             t2 = new Tag("Frederik");
             t3 = new Tag("Tag3");
@@ -63,7 +63,7 @@ class PhotoDTOFacadeTest {
     }
     @Test
     void create() throws API_Exception {
-        PhotoDTO photoDTO = facade.create(new PhotoDTO(new Photo("Name1", "location1", "description", "title")));
+        PhotoDTO photoDTO = facade.create(new PhotoDTO(new Photo("Name1", "location1", "description", "title",3)));
         assertEquals("Name1", photoDTO.getName());
     }
 }

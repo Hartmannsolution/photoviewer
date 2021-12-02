@@ -88,8 +88,8 @@ public class PhotoRessourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        p1 = new Photo("Henrik.jpg","Somewhere", "Some text", "some title");
-        p2 = new Photo("Betty.jpg","Somewhere else", "Some other thext", "another title");
+        p1 = new Photo("Henrik.jpg","Somewhere", "Some text", "some title",2);
+        p2 = new Photo("Betty.jpg","Somewhere else", "Some other thext", "another title",4);
         t1 = new Tag("Joseph");
         t2 = new Tag("Alberta");
 
@@ -231,7 +231,7 @@ public class PhotoRessourceTest {
     @Test
     public void postTest() {
         login("admin", "test");
-        Photo p = new Photo("Helge.jpg","Somewhere","TEXTEXT", "TITLE");
+        Photo p = new Photo("Helge.jpg","Somewhere","TEXTEXT", "TITLE",2);
         p.addTag(new Tag("Josephine"));
         PhotoDTO pdto = new PhotoDTO(p);
         String requestBody = GSON.toJson(pdto);

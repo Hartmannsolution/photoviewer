@@ -88,8 +88,8 @@ class TagFacadeTest {
         em.getTransaction().begin();
         Tag tag3 = new Tag("Helmut", "Boede i Nørregade i 40erne");
         Tag tag4 = new Tag("Helga", "Kendte onkel jørgen som barn");
-        Photo photo = new Photo("Test", "Loc", "Desc", "Title");
-        Photo photo2 = new Photo("Test2", "Loc2", "Desc2", "Title2");
+        Photo photo = new Photo("Test", "Loc", "Desc", "Title",3);
+        Photo photo2 = new Photo("Test2", "Loc2", "Desc2", "Title2",5);
         em.persist(photo2);
         em.persist(photo);
         em.persist(tag3);
