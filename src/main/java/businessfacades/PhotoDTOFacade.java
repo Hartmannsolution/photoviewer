@@ -76,7 +76,7 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
 //        if(tag==null)
 //            throw new EntityNotFoundException("Cannot find Tag with name: "+dto.getName());
         if (tag == null)
-            tag = new Tag(dto.getName());
+            tag = new Tag(dto.getName(), dto.getDescription(), dto.getPhotourl());
         return tag;
     }
 

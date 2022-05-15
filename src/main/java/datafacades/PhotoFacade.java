@@ -210,6 +210,12 @@ public class PhotoFacade implements IDataFacade<Photo> {
     public List<Photo> findByProperty(String property, String propValue) {
         if (property == "tags")
             return getByTagName(propValue);
+        EntityManager em = getEntityManager();
+        if (property.equals("location")){
+            TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
+            q.setParameter("val", propValue );
+            return q.getResultList();
+        }
         String baseUrl = null;
         try {
             baseUrl = utils.Utility.readFileProperty("BASEURL");
@@ -218,7 +224,6 @@ public class PhotoFacade implements IDataFacade<Photo> {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        EntityManager em = getEntityManager();
         TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
         q.setParameter("val", baseUrl + propValue + "/");
         return q.getResultList();

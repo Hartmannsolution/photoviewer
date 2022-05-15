@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 public class TagDTO {
     String name;
     String description;
+    String photourl;
     List<String> photos = new ArrayList();
 
     public TagDTO(Tag tag) {
         this.name = tag.getName();
         this.description = tag.getDescription();
+        this.photourl = tag.getPhotoUrl();
         tag.getPhotos().forEach(photo->this.photos.add(photo.getFileName()));
     }
 
@@ -69,5 +71,13 @@ public class TagDTO {
                 ", description='" + description + '\'' +
                 ", photos=" + photos +
                 '}';
+    }
+
+    public String getPhotourl() {
+        return photourl;
+    }
+
+    public void setPhotourl(String photourl) {
+        this.photourl = photourl;
     }
 }

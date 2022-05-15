@@ -81,7 +81,7 @@ public class PhotoDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PhotoDTO photoDTO = (PhotoDTO) o;
-        return location == photoDTO.location &&Objects.equals(name, photoDTO.name) && Objects.equals(description, photoDTO.description);
+        return Objects.equals(location, photoDTO.location) &&Objects.equals(name, photoDTO.name) && Objects.equals(description, photoDTO.description);
     }
 
     @Override

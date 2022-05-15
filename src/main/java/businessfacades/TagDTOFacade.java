@@ -45,7 +45,7 @@ public class TagDTOFacade implements IDataFacade<TagDTO>{
         EntityManager em = EMF.createEntityManager();
         Tag tag = em.find(Tag.class, dto.getName());
         if (tag == null)
-            tag = new Tag(dto.getName(), dto.getDescription());
+            tag = new Tag(dto.getName(), dto.getDescription(),dto.getPhotourl());
         else{
             tag.setDescription(dto.getDescription());
             final Tag t = tag;

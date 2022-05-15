@@ -13,6 +13,7 @@ public class Tag {
     @Column(name = "tagname", length = 35)
     private String name;
     private String description;
+    private String photoUrl;
 
 //    If the "mappedBy" option is not found in any of the related entities JPA will define BOTH entities as the relationship owners: https://enos.itcollege.ee/~jpoial/java/naited/JPA_Mini_Book.pdf
     @ManyToMany(mappedBy = "tags") //, cascade = CascadeType.PERSIST) //, fetch = FetchType.EAGER) //Target side of relationsship (inverse side)
@@ -30,11 +31,17 @@ public class Tag {
     }
 
     public Tag(String name) {
-        this(name, null);
+        this(name, null, null);
     }
+
     public Tag(String name, String description) {
+        this(name, description, null);
+    }
+
+    public Tag(String name, String description, String photoUrl) {
         this.setName(name);
         this.description = description;
+        this.photoUrl = photoUrl;
     }
 
     private String capitalizeFirst(String s){
@@ -87,5 +94,13 @@ public class Tag {
                 ", description='" + description + '\'' +
                 ", photos=" + photos +
                 '}';
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

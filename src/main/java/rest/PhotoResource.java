@@ -58,6 +58,7 @@ public class PhotoResource {
 //        System.out.println("GET BY PROPERTY: "+propName+": "+propValue);
 //        if(propName == "location" && propValue == "all")
 //            return Response.ok().entity(GSON.toJson(PHOTO_FACADE.getAll())).build();
+        propValue = propValue.replace("#", "/");
         List<PhotoDTO> photos = PHOTO_FACADE .findByProperty(propName, propValue);
         return Response.ok().entity(GSON.toJson(photos)).build();
     }
