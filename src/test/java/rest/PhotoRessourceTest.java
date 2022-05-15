@@ -90,7 +90,7 @@ public class PhotoRessourceTest {
         EntityManager em = emf.createEntityManager();
         p1 = new Photo("Henrik.jpg","Somewhere", "Some text", "some title",2);
         p2 = new Photo("Betty.jpg","Somewhere else", "Some other thext", "another title",4);
-        p3 = new Photo("test.jpg","bendixmadsen/BMFotoArkiv/Thumbnail", "Some other text", "another title",4);
+        p3 = new Photo("test.jpg","https://h-mogensen.dk/bendixmadsen/BMFotoArkiv/Thumbnail/", "Some other text", "another title",4);
         t1 = new Tag("Joseph");
         t2 = new Tag("Alberta");
 
@@ -235,7 +235,7 @@ public class PhotoRessourceTest {
         photoDTOs = given()
                 .contentType("application/json")
                 .when()
-                .get("/photo/property/location/bendixmadsen#BMFotoArkiv#Thumbnail")
+                .get("/photo/property/location/bendixmadsen#BMFotoArkiv#Thumbnail#")
                 .then()
                 .extract().body().jsonPath().getList("", PhotoDTO.class);
         System.out.println("GET BY RESSOURCE: "+photoDTOs.toString());

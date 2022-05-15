@@ -118,7 +118,7 @@ public class PhotoFacade implements IDataFacade<Photo> {
 
         //If viewno has changed all photos view no must change accordingly.
         if (!java.util.Objects.equals(photo.getViewNo(), found.getViewNo())) {
-           found.setViewNo(photo.getViewNo());
+            found.setViewNo(photo.getViewNo());
             found = reOrderAll(found);
             System.out.println("FOUND: " + found);
         }
@@ -211,22 +211,23 @@ public class PhotoFacade implements IDataFacade<Photo> {
         if (property == "tags")
             return getByTagName(propValue);
         EntityManager em = getEntityManager();
-        if (property.equals("location")){
-            TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
-            q.setParameter("val", propValue );
-            return q.getResultList();
-        }
-        String baseUrl = null;
-        try {
-            baseUrl = utils.Utility.readFileProperty("BASEURL");
-            System.out.println("LOKALITET:" + baseUrl);
+//        if (property.equals("location")) {
+//            TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
+//            q.setParameter("val", propValue );
+//            return q.getResultList();
+            String baseUrl = null;
+            try {
+                baseUrl = utils.Utility.readFileProperty("BASEURL");
+                System.out.println("LOKALITET:" + baseUrl);
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
-        q.setParameter("val", baseUrl + propValue + "/");
-        return q.getResultList();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
+            q.setParameter("val", baseUrl + propValue);
+            return q.getResultList();
+//        }
+//        return null;
     }
 
 }

@@ -14,7 +14,7 @@ public class Photo {
     @Column(name = "FilNavn", length = 35)
     private String fileName;
 
-    @Column(name = "Location", nullable = false, length = 35)
+    @Column(name = "Location", nullable = false, length = 100)
     private String location;
 
     @Column(name = "title")//, nullable = false, length = 35)
