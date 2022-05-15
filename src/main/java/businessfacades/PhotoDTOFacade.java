@@ -20,20 +20,21 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
     private static IDataFacade<PhotoDTO> instance;
     private static IDataFacade<Photo> photoFacade;
 
-    private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private static EntityManagerFactory EMF;
     //Private Constructor to ensure Singleton
 
     private PhotoDTOFacade() {}
 
-    public static IDataFacade<PhotoDTO> getFacade() {
-        if (instance == null) {
-            photoFacade = PhotoFacade.getFacade(EMF);
-            instance = new PhotoDTOFacade();
-        }
-        return instance;
-    }
+//    public static IDataFacade<PhotoDTO> getFacade(EntityManagerFactory emf) {
+//        if (instance == null) {
+//            photoFacade = PhotoFacade.getFacade(EMF);
+//            instance = new PhotoDTOFacade();
+//        }
+//        return instance;
+//    }
     //For testing purposes
     public static IDataFacade<PhotoDTO> getFacade(EntityManagerFactory emf) {
+        EMF = emf;
         photoFacade = PhotoFacade.getFacade(emf);
         instance = new PhotoDTOFacade();
         return instance;

@@ -22,7 +22,7 @@ import utils.EMF_Creator;
 @Path("photo")
 public class PhotoResource {
        
-    private static final IDataFacade<PhotoDTO> PHOTO_FACADE  =  PhotoDTOFacade.getFacade();
+    private static final IDataFacade<PhotoDTO> PHOTO_FACADE  =  PhotoDTOFacade.getFacade(EMF_Creator.createEntityManagerFactory());
     private static final IDataFacade<TagDTO> TAG_FACADE =  TagDTOFacade.getFacade();
     private static final IDataFacade<UserDTO> USER_FACADE =  UserFacade.getFacade(EMF_Creator.createEntityManagerFactory());
 
