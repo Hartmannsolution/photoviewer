@@ -224,7 +224,7 @@ public class PhotoFacade implements IDataFacade<Photo> {
                 ex.printStackTrace();
             }
             TypedQuery<Photo> q = em.createQuery("SELECT p FROM Photo p WHERE p." + property + " =:val", Photo.class);
-            q.setParameter("val", baseUrl + propValue);
+            q.setParameter("val", baseUrl + propValue + "/");
             return q.getResultList();
 //        }
 //        return null;
