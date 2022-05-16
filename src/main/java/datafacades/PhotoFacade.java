@@ -162,14 +162,16 @@ public class PhotoFacade implements IDataFacade<Photo> {
     public static void main(String[] args) throws EntityNotFoundException {
         emf = EMF_Creator.createEntityManagerFactory();
         IDataFacade fe = getFacade(emf);
+
 ////        fe.findByProperty("location", "Joergensen/").forEach(photo->System.out.println(photo));
-//        Photo newP = new Photo("Joergensen_0001_TN.jpg","","","");
 //        Photo newP2 = new Photo("Helge333333","","","");
-////        try {
-////            fe.create(newP);
-////        } catch (API_Exception e) {
-////            e.printStackTrace();
-////        }
+//        Photo newP = new Photo("Joergensen_0001_TN.jpg","","","");
+        Photo photo = new Photo("test.jpg","https://h-mogensen.dk/bendixmadsen/BMFotoArkiv/Thumbnail/", "Some other text", "another title",4);
+        try {
+            fe.create(photo);
+        } catch (API_Exception e) {
+            e.printStackTrace();
+        }
 ////        newP.addTag(new Tag("Hello Test"));
 //        newP.addTag(new Tag("Mors"));
 //        newP2.addTag((new Tag("Børge Artmann")));

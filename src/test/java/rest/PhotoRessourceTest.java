@@ -235,7 +235,7 @@ public class PhotoRessourceTest {
         photoDTOs = given()
                 .contentType("application/json")
                 .when()
-                .get("/photo/property/location/bendixmadsen#BMFotoArkiv#Thumbnail")
+                .get("/photo/property/location/bendixmadsen-BMFotoArkiv-Thumbnail")
                 .then()
                 .extract().body().jsonPath().getList("", PhotoDTO.class);
         System.out.println("GET BY RESSOURCE: "+photoDTOs.toString());
