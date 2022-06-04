@@ -1,5 +1,6 @@
 package facades;
 
+import datafacades.IDataExtra;
 import datafacades.IDataFacade;
 import datafacades.PhotoFacade;
 import datafacades.TagFacade;
@@ -7,6 +8,8 @@ import errorhandling.API_Exception;
 import errorhandling.EntityNotFoundException;
 import entities.Photo;
 import entities.Tag;
+import groovyjarjarantlr4.v4.runtime.atn.StarLoopEntryState;
+import junit.framework.Assert;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
@@ -20,14 +23,16 @@ class PhotoFacadeTest {
 
     private static EntityManagerFactory emf;
     private static IDataFacade<Photo> facade;
+    private static IDataExtra<Photo> facadeExtra;
     private static IDataFacade<Tag> tagsFacade;
-    Photo p1,p2;
+    Photo p1,p2,p3;
     Tag t1, t2, t3;
 
     @BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
         facade = PhotoFacade.getFacade(emf);
+        facadeExtra = PhotoFacade.getFacadeExtra(emf);
         tagsFacade = TagFacade.getFacade(emf);
     }
 
@@ -46,12 +51,14 @@ class PhotoFacadeTest {
             em.createNamedQuery("Photo.deleteAllRows").executeUpdate();
             p1 = new Photo("photo1","Somewhere", "Dette er et meget gammelt billede","ny title",2);
             p2 = new Photo("photo2","Some file name", "Dette er et billede af noget","new title",4);
+            p3 = new Photo("photo3","Some file new name", "Dette er et billede af noget","new title",5);
             t1 = new Tag("Dorthea");
             t2 = new Tag("Frederik");
             t3 = new Tag("Tag3");
             p1.addTag(t3);
             em.persist(p1);
             em.persist(p2);
+            em.persist(p3);
             em.persist(t3);
             em.persist(t1);
             em.persist(t2);
@@ -123,10 +130,11 @@ class PhotoFacadeTest {
     @Test
     void getAll() {
         System.out.println("Testing getAll()");
-        int expected = 2;
+        int expected = 3;
         int actual = facade.getAll().size();
         assertEquals(expected,actual);
     }
+
 @Test
     void getAllTags() {
         System.out.println("Testing getAllTags()");
@@ -197,9 +205,17 @@ class PhotoFacadeTest {
     void delete() throws EntityNotFoundException {
         System.out.println("Testing delete(id)");
         Photo p = facade.delete(p1.getFileName());
-        int expected = 1;
+        int expected = 2;
         int actual = facade.getAll().size();
         assertEquals(expected, actual);
         assertEquals(p,p1);
     }
+   @Test
+   public void pagination() {
+       System.out.println("Test the use of pagination when getting images");
+       int expected = 2;
+       int actual = facadeExtra.getAllPaginated(0, 2).size();
+
+       Assert.assertEquals(expected, actual);
+   }
 }

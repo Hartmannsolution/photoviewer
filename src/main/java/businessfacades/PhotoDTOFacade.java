@@ -1,5 +1,6 @@
 package businessfacades;
 
+import datafacades.IDataExtra;
 import datafacades.IDataFacade;
 import datafacades.PhotoFacade;
 import dtos.PhotoDTO;
@@ -16,9 +17,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
+public class PhotoDTOFacade implements IDataFacade<PhotoDTO>, IDataExtra<PhotoDTO> {
     private static IDataFacade<PhotoDTO> instance;
     private static IDataFacade<Photo> photoFacade;
+    private static IDataExtra<Photo> photoExtra;
+    private static IDataExtra<PhotoDTO> instanceExtra;
 
     private static EntityManagerFactory EMF;
     //Private Constructor to ensure Singleton
@@ -38,6 +41,13 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
         photoFacade = PhotoFacade.getFacade(emf);
         instance = new PhotoDTOFacade();
         return instance;
+    }
+
+    public static IDataExtra<PhotoDTO> getExtraFacade(EntityManagerFactory emf) {
+        EMF = emf;
+        photoExtra = PhotoFacade.getFacadeExtra(emf);
+        instanceExtra = new PhotoDTOFacade();
+        return instanceExtra;
     }
 
     private Photo getEntity(PhotoDTO dto) {
@@ -113,5 +123,10 @@ public class PhotoDTOFacade implements IDataFacade<PhotoDTO>{
     @Override
     public List<PhotoDTO> findByProperty(String property, String propValue) throws EntityNotFoundException {
         return PhotoDTO.toList(photoFacade.findByProperty(property, propValue));
+    }
+
+    @Override
+    public List<PhotoDTO> getAllPaginated(int pageIndex, int numberOfRecords) {
+        return PhotoDTO.toList(photoExtra.getAllPaginated(pageIndex, numberOfRecords));
     }
 }

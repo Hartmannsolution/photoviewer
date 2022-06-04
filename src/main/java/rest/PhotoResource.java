@@ -2,6 +2,7 @@ package rest;
 
 import businessfacades.PhotoDTOFacade;
 import businessfacades.TagDTOFacade;
+import datafacades.IDataExtra;
 import dtos.TagDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +24,7 @@ import utils.EMF_Creator;
 public class PhotoResource {
        
     private static final IDataFacade<PhotoDTO> PHOTO_FACADE  =  PhotoDTOFacade.getFacade(EMF_Creator.createEntityManagerFactory());
+    private static final IDataExtra<PhotoDTO> EXTRA_FACADE  =  PhotoDTOFacade.getExtraFacade(EMF_Creator.createEntityManagerFactory());
     private static final IDataFacade<TagDTO> TAG_FACADE =  TagDTOFacade.getFacade();
     private static final IDataFacade<UserDTO> USER_FACADE =  UserFacade.getFacade(EMF_Creator.createEntityManagerFactory());
 
@@ -31,7 +33,15 @@ public class PhotoResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAll() {
-        return Response.ok().entity(GSON.toJson(PHOTO_FACADE .getAll())).build();
+        return Response.ok().entity(GSON.toJson(PHOTO_FACADE.getAll())).build();
+    }
+
+    @GET
+    @Path("paginated")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllPaginated(@QueryParam("index") int index,
+                                    @QueryParam("number") int number) {
+        return Response.ok().entity(GSON.toJson(EXTRA_FACADE.getAllPaginated(index, number))).build();
     }
 
     @GET
@@ -104,7 +114,7 @@ public class PhotoResource {
     @Produces({MediaType.APPLICATION_JSON})
     @RolesAllowed("admin")
     public Response delete(@PathParam("id") String id) throws EntityNotFoundException {
-        PhotoDTO deleted = PHOTO_FACADE .delete(id);
+        PhotoDTO deleted = PHOTO_FACADE.delete(id);
         return Response.ok().entity(GSON.toJson(deleted)).build();
     }
     
